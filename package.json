@@ -1,4 +1,9 @@
 {
+  "repository": {
+    "url": "https: //github.com/rowild/threejs-spotlighthelper-datgui",
+    "email": "robertwildling@gmail.com"
+  },
+  "license": "BSD-3-Clause",
   "scripts": {
     "build": "webpack --config ./bundler/webpack.prod.js",
     "dev": "webpack serve --config ./bundler/webpack.dev.js"

@@ -52,41 +52,50 @@ guiAmbientLightFolder.add(ambientLight, 'intensity').min(0).max(1).step(0.001)
     // shadow camera helper
     // console.log(directionalLight.shadow.camera)
     const directionalLightCameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
-    // directionalLightCameraHelper.visible = false
+    directionalLightCameraHelper.visible = false
     scene.add(directionalLightCameraHelper)
 
     // Debug
-    const guiDirectionalLightFolder = gui.addFolder('Directional Light')
-    guiDirectionalLightFolder.open()
-    guiDirectionalLightFolder.add(directionalLight, 'visible', false)
-    guiDirectionalLightFolder.add(directionalLight, 'intensity', 0, 1, 0.001)
-    guiDirectionalLightFolder.add(directionalLight.position, 'x', -5, 5, 0.001)
-    guiDirectionalLightFolder.add(directionalLight.position, 'y', -5, 5, 0.001)
-    guiDirectionalLightFolder.add(directionalLight.position, 'z', -5, 5, 0.001)
-    guiDirectionalLightFolder.add(directionalLightCameraHelper, 'visible', false)
+    {
+        const guiDirectionalLightFolder = gui.addFolder('Directional Light')
+        guiDirectionalLightFolder.open()
 
-    const guiDirectionalLightCameraFolder = guiDirectionalLightFolder.addFolder('Directional Light: Shadow Camera')
-    guiDirectionalLightCameraFolder.open()
-    guiDirectionalLightCameraFolder.add(directionalLight.shadow.camera, 'near', 0, 15, 0.1)
-        .onChange(
-            () => {
-                directionalLight.shadow.camera.updateProjectionMatrix()
-                directionalLightCameraHelper.update()
-            }
-        )
-    guiDirectionalLightCameraFolder.add(directionalLight.shadow.camera, 'far', 0, 15, 0.1)
-        .onChange(
-            () => {
-                directionalLight.shadow.camera.updateProjectionMatrix()
-                directionalLightCameraHelper.update()
-            }
-        )
+        const guiDirectionalLight = guiDirectionalLightFolder.addFolder('THREE.DirectionalLight')
+        guiDirectionalLight.add(directionalLight, 'visible', false)
+        guiDirectionalLight.add(directionalLight, 'intensity', 0, 1, 0.001)
+        guiDirectionalLight.add(directionalLight.position, 'x', -5, 5, 0.001)
+        guiDirectionalLight.add(directionalLight.position, 'y', -5, 5, 0.001)
+        guiDirectionalLight.add(directionalLight.position, 'z', -5, 5, 0.001)
+        guiDirectionalLight.add(directionalLightCameraHelper, 'visible', false)
+
+        const guiDirectionalLightCameraFolder = guiDirectionalLightFolder.addFolder('THREE.DirectionalLight.shadow.camera')
+        guiDirectionalLightCameraFolder.open()
+        guiDirectionalLightCameraFolder.add(directionalLight.shadow.camera, 'near', 0, 15, 0.1)
+            .onChange(
+                () => {
+                    directionalLight.shadow.camera.updateProjectionMatrix()
+                    directionalLightCameraHelper.update()
+                }
+            )
+        guiDirectionalLightCameraFolder.add(directionalLight.shadow.camera, 'far', 0, 15, 0.1)
+            .onChange(
+                () => {
+                    directionalLight.shadow.camera.updateProjectionMatrix()
+                    directionalLightCameraHelper.update()
+                }
+            )
+
+        const guiDirectionalLightHelper = guiDirectionalLightFolder.addFolder('THREE.CameraHelper for DirectionalLight')
+        guiDirectionalLightHelper.open()
+        guiDirectionalLightHelper.add(directionalLightCameraHelper, 'visible')
+    }
 }
 
 // SpotLight
 {
     const spotLight = new THREE.SpotLight(0xffffff, 0.4, 10, Math.PI * 0.3)
     spotLight.castShadow = true
+    spotLight.distance = 3
     spotLight.position.set(0,2,6)
     console.log("spotLight.shadow =", spotLight.shadow)
     spotLight.shadow.mapSize.width = 1024
@@ -103,38 +112,47 @@ guiAmbientLightFolder.add(ambientLight, 'intensity').min(0).max(1).step(0.001)
     scene.add(spotLightCameraHelper)
 
     // Debug
-    const guiSpotLightFolder = gui.addFolder('Spot Light')
-    guiSpotLightFolder.open()
-    guiSpotLightFolder.add(spotLight, 'visible')
-    guiSpotLightFolder.add(spotLight, 'intensity', 0, 1, 0.001)
-    guiSpotLightFolder.add(spotLight.position, 'x', -5, 5, 0.001)
-    guiSpotLightFolder.add(spotLight.position, 'y', -5, 5, 0.001)
-    guiSpotLightFolder.add(spotLight.position, 'z', -5, 10, 0.001)
-    guiSpotLightFolder.add(spotLightCameraHelper, 'visible')
+    {
+        const guiSpotLightFolder = gui.addFolder('Spot Light')
+        guiSpotLightFolder.open()
 
-    const guiSpotLightShadowFolder = guiSpotLightFolder.addFolder('Spot Light Shadow: Camera')
-    guiSpotLightShadowFolder.open()
-    guiSpotLightShadowFolder.add(spotLight.shadow.camera, 'fov', 1, 100, 1)
-        .onChange(
-            () => {
-                spotLight.shadow.camera.updateProjectionMatrix()
-                spotLightCameraHelper.update()
-            }
-        )
-    guiSpotLightShadowFolder.add(spotLight.shadow.camera, 'near', 0, 10, 0.1)
-        .onChange(
-            () => {
-                spotLight.shadow.camera.updateProjectionMatrix()
-                spotLightCameraHelper.update()
-            }
-        )
-    guiSpotLightShadowFolder.add(spotLight.shadow.camera, 'far', 0, 15, 0.1)
-        .onChange(
-            () => {
-                spotLight.shadow.camera.updateProjectionMatrix()
-                spotLightCameraHelper.update()
-            }
-        )
+        const guiSpotLight = guiSpotLightFolder.addFolder('THREE.SpotLight')
+        // guiSpotLight.open()
+        guiSpotLight.add(spotLight, 'visible')
+        guiSpotLight.add(spotLight, 'intensity', 0, 1, 0.001)
+        guiSpotLight.add(spotLight, 'distance', 0.0001, 100, 0.001)
+        guiSpotLight.add(spotLight.position, 'x', -5, 5, 0.001)
+        guiSpotLight.add(spotLight.position, 'y', -5, 5, 0.001)
+        guiSpotLight.add(spotLight.position, 'z', -5, 10, 0.001)
+
+        const guiSpotLightShadowFolder = guiSpotLightFolder.addFolder('THREE.SpotLight.shadow.camera')
+        // guiSpotLightShadowFolder.open()
+        guiSpotLightShadowFolder.add(spotLight.shadow.camera, 'fov', 1, 100, 1)
+            .onChange(
+                () => {
+                    spotLight.shadow.camera.updateProjectionMatrix()
+                    spotLightCameraHelper.update()
+                }
+            )
+        guiSpotLightShadowFolder.add(spotLight.shadow.camera, 'near', 0, 10, 0.1)
+            .onChange(
+                () => {
+                    spotLight.shadow.camera.updateProjectionMatrix()
+                    spotLightCameraHelper.update()
+                }
+            )
+        guiSpotLightShadowFolder.add(spotLight.shadow.camera, 'far', 0, 15, 0.1)
+            .onChange(
+                () => {
+                    spotLight.shadow.camera.updateProjectionMatrix()
+                    spotLightCameraHelper.update()
+                }
+            )
+
+        const guiSpotLightHelper = guiSpotLightFolder.addFolder('THREE.CameraHelper for SpotLight')
+        // guiSpotLightHelper.open()
+        guiSpotLightHelper.add(spotLightCameraHelper, 'visible')
+    }
 }
 
 // PointLight
@@ -157,14 +175,45 @@ guiAmbientLightFolder.add(ambientLight, 'intensity').min(0).max(1).step(0.001)
     scene.add(pointLightCameraHelper)
 
     // Debug
-    const guiPointLightFolder = gui.addFolder('Point Light')
-    // guiPointLightFolder.open()
-    guiPointLightFolder.add(pointLight, 'visible')
-    guiPointLightFolder.add(pointLight, 'intensity').min(0).max(1).step(0.001)
-    guiPointLightFolder.add(pointLight.position, 'x').min(-5).max(5).step(0.001)
-    guiPointLightFolder.add(pointLight.position, 'y').min(-5).max(5).step(0.001)
-    guiPointLightFolder.add(pointLight.position, 'z').min(-5).max(5).step(0.001)
-    guiPointLightFolder.add(pointLightCameraHelper, 'visible')
+    {
+        const guiPointLightFolder = gui.addFolder('Point Light')
+        guiPointLightFolder.open()
+
+        const guiPointLight = guiPointLightFolder.addFolder('THREE.PointLight')
+        guiPointLight.add(pointLight, 'visible')
+        guiPointLight.add(pointLight, 'intensity').min(0).max(1).step(0.001)
+        guiPointLight.add(pointLight.position, 'x').min(-5).max(5).step(0.001)
+        guiPointLight.add(pointLight.position, 'y').min(-5).max(5).step(0.001)
+        guiPointLight.add(pointLight.position, 'z').min(-5).max(5).step(0.001)
+
+        const guiPointLightShadowFolder = guiPointLightFolder.addFolder('THREE.PointLight.shadow.camera')
+        // guiPopinttLightShadowFolder.open()
+        guiPointLightShadowFolder.add(pointLight.shadow.camera, 'fov', 1, 100, 1)
+            .onChange(
+                () => {
+                    pointLight.shadow.camera.updateProjectionMatrix()
+                    pointLightCameraHelper.update()
+                }
+            )
+        guiPointLightShadowFolder.add(pointLight.shadow.camera, 'near', 0, 10, 0.1)
+            .onChange(
+                () => {
+                    pointLight.shadow.camera.updateProjectionMatrix()
+                    pointLightCameraHelper.update()
+                }
+            )
+        guiPointLightShadowFolder.add(pointLight.shadow.camera, 'far', 0, 15, 0.1)
+            .onChange(
+                () => {
+                    pointLight.shadow.camera.updateProjectionMatrix()
+                    pointLightCameraHelper.update()
+                }
+            )
+
+        const guiPointLightHelper = guiPointLightFolder.addFolder('THREE.CameraHelper for PointLight')
+        // guiPointLightHelper.open()
+        guiPointLightHelper.add(pointLightCameraHelper, 'visible')
+    }
 }
 /**
  * Materials
